@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  reservations_db:
+    image: postgres:15.4-alpine3.18
+    container_name: reservations_db
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    ports:
+      - "5432:5432"
+    networks:
+      - reservations_api_network
+
+  reservations_api:
+    container_name: reservations_api
+    build: .
+    environment:
+      DBHOST: "${DBHOST}"
+      DBUSER: "${DBUSER}"
+      DBPASS: "${DBPASS}"
+      USER: "${USER}"
+    volumes:
+      - .:/reservations_api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - reservations_db
+    networks:
+      - reservations_api_network
+
+networks:
+  reservations_api_network:
+    driver: bridge
+
+volumes:
+  postgres:
