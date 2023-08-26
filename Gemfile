@@ -33,6 +33,16 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
+# Rswag extends rspec-rails "request specs" with a Swagger-based DSL for describing and testing API operations.
+# You describe your API operations with a succinct, intuitive syntax, and it automatically runs the tests.
+# Once you have green tests, run a rake task to auto-generate corresponding Swagger files
+# and expose them as YAML or JSON endpoints.
+# Rswag also provides an embedded version of the awesome swagger-ui that's powered by the exposed file.
+# This toolchain makes it seamless to go from integration specs, which you're probably doing in some form already,
+# to living documentation for your API consumers.
+gem 'rswag-api'
+gem 'rswag-ui'
+
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem "rack-cors"
 
@@ -40,6 +50,7 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem 'rspec-rails', '~> 6.0.0'
+  gem 'rswag-specs'
 end
 
 group :development do
