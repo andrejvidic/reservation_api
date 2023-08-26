@@ -16,6 +16,9 @@ AllCops:
 Layout/LineLength:
   Max: 140
 
+Layout/CommentIndentation:
+  Enabled: false
+
 Layout/SpaceInsidePercentLiteralDelimiters:
   Enabled: false
 
