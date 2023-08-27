@@ -18,13 +18,21 @@
     To proceed you will need to ensure you follow the Pre App dependencies section below. 
 
 ### Pre App dependencies -  Must install prior to running Docker App Setup
-    1. Install docker desktop for your OS [Linux](https://docs.docker.com/desktop/install/linux-install/), [Mac](https://docs.docker.com/desktop/install/mac-install/), [Windows](https://docs.docker.com/desktop/install/windows-install/)
-    Notes: 
-    During the installation process you will be guided to uninstall docker-desktop and reinstall the latest version. 
-    The reason for this is so you install the latest Go CLI called "docker compose" instead of using the (old) "docker-compose" Python variant. 
-    My instructions below are written for "docker compose" Go CLI (docker compose v2.20.2). 
-    2. 
-    3. Ensure port 5432 is free. Otherwise kill any postgres processes so that the dockerised postgres process can attach to the OS port 5432. 
+    1. Install docker desktop for your OS
+    [Linux](https://docs.docker.com/desktop/install/linux-install/),
+    [Mac](https://docs.docker.com/desktop/install/mac-install/),
+    [Windows](https://docs.docker.com/desktop/install/windows-install/)
+
+      Notes:
+      a) During the installation process you will be guided to uninstall docker-desktop, if you have it installed.
+         Then you will be guided to reinstall the latest version.
+         The reason for this is so you install the latest Go CLI called "docker compose" instead of using the (old)
+         "docker-compose" Python variant.
+      b) My instructions below are written for Linux and "docker compose" Go CLI (docker compose v2.20.2).
+    2. MacOS and Windows users will find when you load the .env file in step 2 of Docker App Setup it will provide
+    defaults to cater for your OS'.
+    3. Ensure port 5432 is free. Otherwise kill any postgres processes so that the dockerised postgres process can
+    attach to the OS port 5432.
 
 ### App dependencies covered by docker
     Ruby 3.2.2
@@ -37,20 +45,25 @@
     To setup the app:
     1. Save the project locally.
     `git clone https://github.com/andrejvidic/reservation_api.git`
-    2. load .env file into your current terminal shell
-    `cd resrvation_api && source ./.env`
+
+    2. load .env variables into your current terminal shell environment
+    `cd resrvation_api`
+    `source ./.env.user ./.env.rails ./.env.postgres`
+    
     3. Build the docker images.
     `docker compose build --build-arg USER=$USER --build-arg USER_ID=$USER_ID --build-arg GROUP_ID=$GROUP_ID --build-arg GROUP_NAME=$GROUP_NAME`
+
     4. Run the docker containers and let docker compose handle container orchestration.
     `docker compose up -d`
+
     5. Ensure both the reservations_db and reservations_api docker containers are running 
     `docker ps -a`
+
     6. If there are no running containers, check the error logs (Should not need this step)
     `docker logs <name_of_container>`
-    7. Drop into the docker container shell 
-    `docker compose exec reservations_api bash`
-    8. Create the postgres reservations_api_development and test databases 
-    `bin/rails db:drop db:create db:schema:load`
+
+    7. Create the postgres reservations_api_development and test databases 
+    `docker compose run web bin/rails db:drop db:create db:schema:load`
 
 ## Testing
     From the Docker App Setup section you should be in the docker bash shell. If not, re-enter:
