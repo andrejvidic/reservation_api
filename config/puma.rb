@@ -21,6 +21,10 @@ port ENV.fetch("PORT") { 3000 }
 #
 environment ENV.fetch("RAILS_ENV") { "development" }
 
+# Prevent issue with docker build: No such file or directory @ rb_sysopen - tmp/pids/server.pid (Errno::ENOENT)
+require "fileutils"
+FileUtils.mkdir_p("tmp/pids")
+
 # Specifies the `pidfile` that Puma will use.
 pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
