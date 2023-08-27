@@ -1,40 +1,40 @@
 version: '3.8'
 
 services:
-  reservations_db:
+  db:
     image: postgres:15.4-alpine3.18
-    container_name: reservations_db
+    container_name: reservation_db
+    restart: always
+    env_file:
+      - .env.postgres
     volumes:
-      - postgres:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: "${POSTGRES_DB}"
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
-      - reservations_api_network
+      - web_network
 
-  reservations_api:
-    container_name: reservations_api
+  web:
+    container_name: reservation_web
     build: .
+    env_file:
+      - .env.rails
     environment:
-      DBHOST: "${DBHOST}"
-      DBUSER: "${DBUSER}"
-      DBPASS: "${DBPASS}"
-      USER: "${USER}"
+      RAILS_ENV: "development"
+      RAILS_MAX_THREADS: "5"
+      PORT: "3000"
     volumes:
-      - .:/reservations_api
+      - .:/web
     ports:
       - "3000:3000"
     depends_on:
-      - reservations_db
+      - db
     networks:
-      - reservations_api_network
+      - web_network
 
 networks:
-  reservations_api_network:
+  web_network:
     driver: bridge
 
 volumes:
-  postgres:
+  pgdata:
